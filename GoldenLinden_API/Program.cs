@@ -46,6 +46,7 @@ app.UseStaticFiles(new StaticFileOptions()
     RequestPath = new PathString("/Resourses")
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
