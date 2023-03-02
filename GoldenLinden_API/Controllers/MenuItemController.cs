@@ -159,5 +159,40 @@ namespace GoldenLinden_API.Controllers
 
             return _response;
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<ApiResponse>> DeleteMenuItem(int id)
+        {
+            try
+            {
+                if(id == 0)
+                {
+                    return BadRequest();
+                }
+
+                MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
+                if(menuItemFromDb == null)
+                {
+                    return BadRequest();
+                }
+
+                var imageToDelete = menuItemFromDb.Image;
+                if (System.IO.File.Exists(imageToDelete))
+                {
+                    System.IO.File.Delete(imageToDelete);
+                }
+
+                _db.MenuItems.Remove(menuItemFromDb);
+                _db.SaveChanges();
+                _response.StatusCode = HttpStatusCode.NoContent;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+            return _response;
+        }
     }
 }
