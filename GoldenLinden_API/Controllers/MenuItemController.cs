@@ -95,5 +95,69 @@ namespace GoldenLinden_API.Controllers
 
             return _response;
         }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ApiResponse>> UpdateMenuItem(int id, [FromForm] MenuItemUpdateDTO menuItemUpdateDTO)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (menuItemUpdateDTO == null || id != menuItemUpdateDTO.Id)
+                    {
+                        return BadRequest();
+                    }
+
+                    MenuItem menuItemFromDb = await _db.MenuItems.FindAsync(id);
+                    if(menuItemFromDb == null)
+                    {
+                        return BadRequest();
+                    }
+
+                    menuItemFromDb.Name = menuItemUpdateDTO.Name;
+                    menuItemFromDb.Price = menuItemUpdateDTO.Price;
+                    menuItemFromDb.Category = menuItemUpdateDTO.Category;
+                    menuItemFromDb.SpecialTag = menuItemUpdateDTO.SpecialTag;
+                    menuItemFromDb.Description = menuItemUpdateDTO.Description;
+
+                    if(menuItemUpdateDTO.File != null && menuItemUpdateDTO.File.Length > 0)
+                    {
+                        var oldImage = menuItemFromDb.Image;
+                        if (System.IO.File.Exists(oldImage))
+                        {
+                            System.IO.File.Delete(oldImage);
+                        }
+
+                        string fileName = $"{Guid.NewGuid()}{Path.GetExtension(menuItemUpdateDTO.File.FileName)}";
+                        var folderName = Path.Combine("Resourses", "Images");
+                        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), folderName, fileName);
+                        var dbPath = Path.Combine(folderName, fileName);
+                        menuItemFromDb.Image = dbPath;
+
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            menuItemUpdateDTO.File.CopyTo(stream);
+                        }
+
+                    }
+
+                    _db.MenuItems.Update(menuItemFromDb);
+                    _db.SaveChanges();
+                    _response.StatusCode = HttpStatusCode.NoContent;
+                    return Ok(_response);
+                }
+                else
+                {
+                    _response.IsSuccess = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+
+            return _response;
+        }
     }
 }
