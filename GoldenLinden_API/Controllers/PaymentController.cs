@@ -3,6 +3,7 @@ using GoldenLinden_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System.Net;
 
 namespace GoldenLinden_API.Controllers
@@ -38,6 +39,22 @@ namespace GoldenLinden_API.Controllers
 
             #region Create Payment Intent
 
+            StripeConfiguration.ApiKey = _configuration["StripeSettings:SecretKey"];
+            shoppingCart.CartTotal = shoppingCart.CartItems.Sum(u => u.Quantity * u.MenuItem.Price);
+
+            PaymentIntentCreateOptions options = new()
+            {
+                Amount = (int)(shoppingCart.CartTotal * 100),
+                Currency = "usd",
+                PaymentMethodTypes = new List<string>
+                {
+                    "card",
+                },
+            };
+            PaymentIntentService service = new();
+            PaymentIntent response = service.Create(options);
+            shoppingCart.StripePaymentIntentId = response.Id;
+            shoppingCart.ClientSecret = response.ClientSecret;
 
             #endregion
 
