@@ -2,6 +2,7 @@
 using GoldenLinden_API.Models;
 using GoldenLinden_API.Models.Dto;
 using GoldenLinden_API.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace GoldenLinden_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ApiResponse>> GetOrders(string? userId)
         {
             try
