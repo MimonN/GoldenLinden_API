@@ -93,7 +93,7 @@ namespace GoldenLinden_API.Controllers
                     PickupName = orderHeaderDTO.PickupName,
                     PickupPhoneNumber = orderHeaderDTO.PickupPhoneNumber,
                     OrderTotal = orderHeaderDTO.OrderTotal,
-                    OrderDate = DateTime.Now,
+                    OrderDate = DateTime.UtcNow,
                     StripePaymentIntentID = orderHeaderDTO.StripePaymentIntentID,
                     TotalItems = orderHeaderDTO.TotalItems,
                     Status = String.IsNullOrEmpty(orderHeaderDTO.Status) ? SD.status_pending : orderHeaderDTO.Status,
