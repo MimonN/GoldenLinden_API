@@ -11,36 +11,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//{
-//    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
-//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultDbConnection"));
-//});
-string connString;
-if (builder.Environment.IsDevelopment())
-    connString = builder.Configuration.GetConnectionString("DefaultDbConnection");
-else
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    // Use connection string provided at runtime by FlyIO.
-    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-    // Parse connection URL to connection string for Npgsql
-    connUrl = connUrl.Replace("postgres://", string.Empty);
-    var pgUserPass = connUrl.Split("@")[0];
-    var pgHostPortDb = connUrl.Split("@")[1];
-    var pgHostPort = pgHostPortDb.Split("/")[0];
-    var pgDb = pgHostPortDb.Split("/")[1];
-    var pgUser = pgUserPass.Split(":")[0];
-    var pgPass = pgUserPass.Split(":")[1];
-    var pgHost = pgHostPort.Split(":")[0];
-    var pgPort = pgHostPort.Split(":")[1];
-
-    connString = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
-}
-builder.Services.AddDbContext<ApplicationDbContext>(opt =>
-{
-    opt.UseNpgsql(connString);
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDbConnection"));
+    options.UseSqlServer(Environment.GetEnvironmentVariable("GoldenDbConnection"));
 });
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 

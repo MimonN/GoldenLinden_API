@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.c5328c39.css",
-    "main.js": "/static/js/main.d5e2d095.js",
+    "main.js": "/static/js/main.4560c7a8.js",
     "static/media/Golden_Linden.png": "/static/media/Golden_Linden.59d4b126c6747d4168e5.png",
     "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
     "static/media/order_confirmed.jpg": "/static/media/order_confirmed.b4e4ab58589de622c9f2.jpg",
     "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.b2e5aab643c6f0fd2da6.woff2",
     "index.html": "/index.html",
     "main.c5328c39.css.map": "/static/css/main.c5328c39.css.map",
-    "main.d5e2d095.js.map": "/static/js/main.d5e2d095.js.map"
+    "main.4560c7a8.js.map": "/static/js/main.4560c7a8.js.map"
   },
   "entrypoints": [
     "static/css/main.c5328c39.css",
-    "static/js/main.d5e2d095.js"
+    "static/js/main.4560c7a8.js"
   ]
 }
